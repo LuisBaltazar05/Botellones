@@ -1,0 +1,30 @@
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Botella, Catalogo } from '../interfaces/botella.interface';
+
+@Injectable({ providedIn: 'root' })
+export class BotellaService {
+
+  private http = inject(HttpClient);
+  private API = 'http://localhost:3000/api';
+
+  getBotellas() {
+    return this.http.get<Botella[]>(`${this.API}/botellas`);
+  }
+
+  getBotellaById(id: number) {
+    return this.http.get<Botella>(`${this.API}/botellas/${id}`);
+  }
+
+  getBotellasPorCatalogo(catalogo_id: number) {
+    return this.http.get<Botella[]>(`${this.API}/botellas/catalogo/${catalogo_id}`);
+  }
+
+  getCatalogos() {
+    return this.http.get<Catalogo[]>(`${this.API}/catalogos`);
+  }
+
+  crearBotella(botella: Partial<Botella>) {
+    return this.http.post(`${this.API}/botellas`, botella);
+  }
+}

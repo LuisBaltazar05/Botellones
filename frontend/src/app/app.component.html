@@ -1,4 +1,24 @@
-<app-navbar></app-navbar>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+  <span class="navbar-brand">{{ titulo }}</span>
+  <div class="navbar-nav">
+    <a class="nav-link"
+       routerLink="/"
+       routerLinkActive="active"
+       [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
+
+    <a class="nav-link"
+       routerLink="/botellas"
+       routerLinkActive="active">Botellas</a>
+
+    <a class="nav-link"
+       routerLink="/catalogo"
+       routerLinkActive="active">Catálogos</a>
+
+    <a class="nav-link"
+       routerLink="/agregar"
+       routerLinkActive="active">Agregar</a>
+  </div>
+</nav>
 
 <div class="container mt-4">
   <router-outlet></router-outlet>
