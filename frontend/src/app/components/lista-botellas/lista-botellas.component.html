@@ -1,0 +1,26 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Botellas disponibles
+    <span class="badge bg-primary ms-2">{{ totalBotellas }}</span>
+  </h2>
+  <button class="btn btn-success" (click)="irAAgregar()">+ Agregar botella</button>
+</div>
+
+@if (cargando) {
+  <div class="text-center mt-5">
+    <div class="spinner-border text-primary"></div>
+    <p class="mt-2">Cargando botellas...</p>
+  </div>
+} @else if (botellas.length === 0) {
+  <div class="alert alert-warning">No hay botellas registradas.</div>
+} @else {
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    @for (botella of botellas; track botella.id) {
+      <div class="col">
+        <app-botella-card
+          [botella]="botella"
+          (verDetalle)="irADetalle($event)">
+        </app-botella-card>
+      </div>
+    }
+  </div>
+}

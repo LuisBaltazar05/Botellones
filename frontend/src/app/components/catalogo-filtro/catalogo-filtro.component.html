@@ -1,0 +1,30 @@
+<h2 class="mb-3">Catálogos</h2>
+
+<div class="mb-4 d-flex gap-2 flex-wrap">
+  <button class="btn"
+          [class.btn-dark]="catalogoActivo === null"
+          [class.btn-outline-dark]="catalogoActivo !== null"
+          (click)="verTodos()">
+    Todos
+  </button>
+
+  @for (cat of catalogos; track cat.id) {
+    <button class="btn"
+            [class.btn-primary]="catalogoActivo === cat.id"
+            [class.btn-outline-primary]="catalogoActivo !== cat.id"
+            (click)="filtrarPor(cat.id)">
+      {{ cat.nombre }}
+    </button>
+  }
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  @for (botella of botellas; track botella.id) {
+    <div class="col">
+      <app-botella-card
+        [botella]="botella"
+        (verDetalle)="irADetalle($event)">
+      </app-botella-card>
+    </div>
+  }
+</div>

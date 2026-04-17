@@ -1,0 +1,17 @@
+@if (cargando) {
+  <p>Cargando detalle...</p>
+} @else if (!botella) {
+  <div class="alert alert-danger">Botella no encontrada.</div>
+} @else {
+  <div class="card shadow p-4 mx-auto" style="max-width: 600px;">
+    <span class="badge bg-secondary mb-2 w-25">{{ botella.catalogo }}</span>
+    <h2>{{ botella.nombre }}</h2>
+    <p class="text-muted">{{ botella.descripcion }}</p>
+    <hr>
+    <p><strong>Precio:</strong> ${{ botella.precio }}</p>
+    <p><strong>Capacidad:</strong> {{ botella.capacidad_ml }} ml</p>
+    <button class="btn btn-outline-secondary mt-3" (click)="regresar()">
+      ← Regresar
+    </button>
+  </div>
+}
