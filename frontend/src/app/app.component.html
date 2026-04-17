@@ -1,18 +1,18 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
   <span class="navbar-brand">{{ titulo }}</span>
+
   <div class="navbar-nav">
     <a class="nav-link"
-       routerLink="/"
-       routerLinkActive="active"
-       [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
+       routerLink="/inicio"
+       routerLinkActive="active">Inicio</a>
 
     <a class="nav-link"
-       routerLink="/botellas"
+       routerLink="/lista"
        routerLinkActive="active">Botellas</a>
 
     <a class="nav-link"
-       routerLink="/catalogo"
-       routerLinkActive="active">Catálogos</a>
+       routerLink="/buscar"
+       routerLinkActive="active">Buscar</a>
 
     <a class="nav-link"
        routerLink="/agregar"

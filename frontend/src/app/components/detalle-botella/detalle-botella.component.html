@@ -8,7 +8,7 @@
     <h2>{{ botella.nombre }}</h2>
     <p class="text-muted">{{ botella.descripcion }}</p>
     <hr>
-    <p><strong>Precio:</strong> ${{ botella.precio }}</p>
+    <p><strong>Precio:</strong> ${{ botella.precio | currency:'MXN' }}</p>
     <p><strong>Capacidad:</strong> {{ botella.capacidad_ml }} ml</p>
     <button class="btn btn-outline-secondary mt-3" (click)="regresar()">
       ← Regresar
