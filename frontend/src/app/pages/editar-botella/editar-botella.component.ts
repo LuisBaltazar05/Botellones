@@ -32,7 +32,7 @@ export class EditarBotellaComponent implements OnInit {
     descripcion: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]],
     precio:      [0,  [Validators.required, Validators.min(0.01), Validators.max(99999)]],
     capacidad_ml:[0,  [Validators.required, Validators.min(1), Validators.max(50000)]],
-    imagen_url:  ['', [Validators.required, Validators.minLength(5), Validators.pattern('https?://.+')]],
+    imagen_url:  ['', [Validators.pattern('https?://.+')]],
     catalogo_id: [0,  [Validators.required, Validators.min(1), Validators.max(9999)]]
   });
 
@@ -49,10 +49,10 @@ export class EditarBotellaComponent implements OnInit {
           this.form.patchValue({
             nombre:       botella.nombre,
             descripcion:  botella.descripcion,
-            precio:       botella.precio,
-            capacidad_ml: botella.capacidad_ml,
-            imagen_url:   botella.imagen_url,
-            catalogo_id:  botella.catalogo_id
+            precio:       Number(botella.precio),
+            capacidad_ml: Number(botella.capacidad_ml),
+            imagen_url:   botella.imagen_url || '',
+            catalogo_id:  Number(botella.catalogo_id)
           });
           this.cargando = false;
         },
