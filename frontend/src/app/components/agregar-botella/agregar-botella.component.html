@@ -1,101 +1,94 @@
-<div class="card shadow p-4 mx-auto" style="max-width: 600px;">
-  <h2 class="mb-4">Agregar Botella</h2>
-
-  @if (mensajeExito) {
-    <div class="alert alert-success">{{ mensajeExito }}</div>
-  }
-
-  <form #formulario="ngForm" (ngSubmit)="guardar(formulario)">
-
-    <!-- Nombre -->
-    <div class="mb-3">
-      <label class="form-label">Nombre</label>
-      <input type="text"
-             class="form-control"
-             name="nombre"
-             [(ngModel)]="nuevaBotella.nombre"
-             #nombre="ngModel"
-             required
-             minlength="3">
-      @if (nombre.invalid && nombre.touched) {
-        <div class="text-danger small mt-1">
-          @if (nombre.errors?.['required']) { El nombre es obligatorio. }
-          @if (nombre.errors?.['minlength']) { Mínimo 3 caracteres. }
-        </div>
-      }
+<div class="fade-up">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Agregar botella</div>
+      <div class="page-subtitle">Completa los datos para registrar una nueva botella.</div>
     </div>
+  </div>
 
-    <!-- Descripción -->
-    <div class="mb-3">
-      <label class="form-label">Descripción</label>
-      <textarea class="form-control"
-                name="descripcion"
-                [(ngModel)]="nuevaBotella.descripcion"
-                #descripcion="ngModel"
-                required
-                rows="3">
-      </textarea>
-      @if (descripcion.invalid && descripcion.touched) {
-        <div class="text-danger small mt-1">La descripción es obligatoria.</div>
-      }
-    </div>
+  <div class="form-box">
+    <form #formulario="ngForm" (ngSubmit)="guardar(formulario)">
 
-    <!-- Precio -->
-    <div class="mb-3">
-      <label class="form-label">Precio ($)</label>
-      <input type="number"
-             class="form-control"
-             name="precio"
-             [(ngModel)]="nuevaBotella.precio"
-             #precio="ngModel"
-             required
-             min="1">
-      @if (precio.invalid && precio.touched) {
-        <div class="text-danger small mt-1">
-          @if (precio.errors?.['required']) { El precio es obligatorio. }
-          @if (precio.errors?.['min']) { El precio debe ser mayor a 0. }
-        </div>
-      }
-    </div>
-
-    <!-- Capacidad -->
-    <div class="mb-3">
-      <label class="form-label">Capacidad (ml)</label>
-      <input type="number"
-             class="form-control"
-             name="capacidad_ml"
-             [(ngModel)]="nuevaBotella.capacidad_ml"
-             #capacidad="ngModel"
-             required
-             min="1">
-      @if (capacidad.invalid && capacidad.touched) {
-        <div class="text-danger small mt-1">La capacidad es obligatoria y debe ser mayor a 0.</div>
-      }
-    </div>
-
-    <!-- Catálogo -->
-    <div class="mb-3">
-      <label class="form-label">Catálogo</label>
-      <select class="form-select"
-              name="catalogo_id"
-              [(ngModel)]="nuevaBotella.catalogo_id"
-              #catalogo_id="ngModel"
-              required>
-        <option [value]="0" disabled>Selecciona un catálogo</option>
-        @for (cat of catalogos; track cat.id) {
-          <option [value]="cat.id">{{ cat.nombre }}</option>
+      <div class="form-group">
+        <label class="form-label">Nombre</label>
+        <input class="form-input" type="text"
+               name="nombre" [(ngModel)]="nuevaBotella.nombre"
+               #nombre="ngModel" required minlength="3"
+               [class.is-error]="nombre.invalid && nombre.touched"
+               placeholder="Ej: Botella Térmica Pro">
+        @if (nombre.invalid && nombre.touched) {
+          <div class="error-msg">
+            @if (nombre.errors?.['required']) { El nombre es obligatorio. }
+            @if (nombre.errors?.['minlength']) { Mínimo 3 caracteres. }
+          </div>
         }
-      </select>
-      @if (catalogo_id.invalid && catalogo_id.touched) {
-        <div class="text-danger small mt-1">Selecciona un catálogo.</div>
-      }
-    </div>
+      </div>
 
-    <button type="submit"
-            class="btn btn-primary w-100"
-            [disabled]="formulario.invalid">
-      Guardar botella
-    </button>
+      <div class="form-group">
+        <label class="form-label">Descripción</label>
+        <textarea class="form-input" rows="3"
+                  name="descripcion" [(ngModel)]="nuevaBotella.descripcion"
+                  #descripcion="ngModel" required
+                  [class.is-error]="descripcion.invalid && descripcion.touched"
+                  placeholder="Describe la botella..."></textarea>
+        @if (descripcion.invalid && descripcion.touched) {
+          <div class="error-msg">La descripción es obligatoria.</div>
+        }
+      </div>
 
-  </form>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <label class="form-label">Precio ($)</label>
+          <input class="form-input" type="number"
+                 name="precio" [(ngModel)]="nuevaBotella.precio"
+                 #precio="ngModel" required min="1"
+                 [class.is-error]="precio.invalid && precio.touched"
+                 placeholder="0.00">
+          @if (precio.invalid && precio.touched) {
+            <div class="error-msg">Ingresa un precio válido (mínimo $1).</div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Capacidad (ml)</label>
+          <input class="form-input" type="number"
+                 name="capacidad_ml" [(ngModel)]="nuevaBotella.capacidad_ml"
+                 #capacidad="ngModel" required min="1"
+                 [class.is-error]="capacidad.invalid && capacidad.touched"
+                 placeholder="500">
+          @if (capacidad.invalid && capacidad.touched) {
+            <div class="error-msg">Ingresa una capacidad válida.</div>
+          }
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">URL de imagen <span style="color:var(--text-muted); font-weight:400">(opcional)</span></label>
+        <input class="form-input" type="text"
+               name="imagen_url" [(ngModel)]="nuevaBotella.imagen_url"
+               placeholder="https://ejemplo.com/imagen.jpg">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Categoría</label>
+        <select class="form-input"
+                name="catalogo_id" [(ngModel)]="nuevaBotella.catalogo_id"
+                #cat="ngModel" required
+                [class.is-error]="cat.invalid && cat.touched">
+          <option [value]="0" disabled>Selecciona una categoría</option>
+          @for (c of catalogos; track c.id) {
+            <option [value]="c.id">{{ c.nombre }}</option>
+          }
+        </select>
+        @if (cat.invalid && cat.touched) {
+          <div class="error-msg">Selecciona una categoría.</div>
+        }
+      </div>
+
+      <button type="submit" class="btn btn-brand" style="width:100%; justify-content:center; padding: 0.8rem;"
+              [disabled]="formulario.invalid">
+        Guardar botella
+      </button>
+    </form>
+  </div>
 </div>

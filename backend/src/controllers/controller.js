@@ -1,9 +1,11 @@
-import { 
-  getAllBotellas, 
-  getBotellaById, 
+import {
+  getAllBotellas,
+  getBotellaById,
   getBotellasByCatalogo,
   getAllCatalogos,
-  insertBotella 
+  insertBotella,
+  updateBotella,
+  deleteBotella
 } from '../models/model.js';
 
 // GET todas las botellas
@@ -49,14 +51,33 @@ export const getCatalogos = async (req, res) => {
   }
 };
 
-// POST crear botella 
+// POST crear botella
 export const create = async (req, res) => {
   try {
     const result = await insertBotella(req.body);
-    res.status(201).json({ 
-      mensaje: 'Botella creada exitosamente', 
-      id: result.insertId 
-    });
+    res.status(201).json({ mensaje: 'Botella creada exitosamente', id: result.insertId });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// PUT actualizar botella
+export const update = async (req, res) => {
+  try {
+    const result = await updateBotella(req.params.id, req.body);
+    if (result.affectedRows === 0) return res.status(404).json({ error: 'Botella no encontrada' });
+    res.json({ mensaje: 'Botella actualizada correctamente' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// DELETE eliminar botella
+export const remove = async (req, res) => {
+  try {
+    const result = await deleteBotella(req.params.id);
+    if (result.affectedRows === 0) return res.status(404).json({ error: 'Botella no encontrada' });
+    res.json({ mensaje: 'Botella eliminada correctamente' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -1,9 +1,80 @@
-<div class="p-4 bg-light rounded-3 shadow-sm">
-  <h1 class="display-6">Bienvenido al sistema de botellas</h1>
-  <p class="lead">
-    Aquí podrás consultar, buscar, agregar y editar botellas por catálogo.
-  </p>
+<div class="fade-up">
 
-  <a routerLink="/lista" class="btn btn-primary me-2">Ver lista</a>
-  <a routerLink="/agregar" class="btn btn-success">Agregar botella</a>
+  <!-- Hero -->
+  <div class="home-hero">
+    <div class="home-hero-left">
+      <div class="home-eyebrow">Tu tienda de hidratación</div>
+      <h1 class="home-title">
+        Lo mejor en botellas,<br>
+        <span class="home-title-brand">hecho para durar.</span>
+      </h1>
+      <p class="home-sub">
+        Explora nuestro catálogo de acero inoxidable, plástico y cristal.
+        Calidad garantizada en cada producto.
+      </p>
+      <div class="home-hero-actions">
+        <a routerLink="/lista" class="btn btn-brand">Ver catálogo →</a>
+        <a routerLink="/buscar" class="btn btn-ghost">🔍 Buscar producto</a>
+      </div>
+    </div>
+    <div class="home-hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val">{{ totalBotellas() }}</div>
+        <div class="hero-stat-label">Botellas</div>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">{{ catalogos().length }}</div>
+        <div class="hero-stat-label">Categorías</div>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">100%</div>
+        <div class="hero-stat-label">Libre de BPA</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Categorías -->
+  <div class="section-header">
+    <div class="section-title">Explorar por categoría</div>
+    <a routerLink="/lista" class="section-link">Ver todos →</a>
+  </div>
+
+  <div class="cat-grid">
+    @for (cat of catalogos(); track cat.id) {
+      <a [routerLink]="['/lista']" [queryParams]="{ catalogo_id: cat.id }" class="cat-card"
+         [style.--cat-color]="catColors[cat.nombre] || '#EA580C'">
+        <div class="cat-icon-wrap">
+          <span class="cat-icon">{{ catIconos[cat.nombre] || '📦' }}</span>
+        </div>
+        <div class="cat-nombre">{{ cat.nombre }}</div>
+        <div class="cat-sub">Explorar →</div>
+      </a>
+    }
+  </div>
+
+  <!-- Acciones rápidas -->
+  <div class="section-header" style="margin-top:2.5rem">
+    <div class="section-title">Gestión del catálogo</div>
+  </div>
+
+  <div class="quick-grid">
+    <a routerLink="/agregar" class="quick-card">
+      <div class="quick-icon">➕</div>
+      <div class="quick-label">Agregar botella</div>
+      <div class="quick-sub">Registrar nuevo producto</div>
+    </a>
+    <a routerLink="/buscar" class="quick-card">
+      <div class="quick-icon">🔍</div>
+      <div class="quick-label">Buscar</div>
+      <div class="quick-sub">Por nombre o descripción</div>
+    </a>
+    <a routerLink="/carrito" class="quick-card">
+      <div class="quick-icon">🛒</div>
+      <div class="quick-label">Mi carrito</div>
+      <div class="quick-sub">Ver selección actual</div>
+    </a>
+  </div>
+
 </div>

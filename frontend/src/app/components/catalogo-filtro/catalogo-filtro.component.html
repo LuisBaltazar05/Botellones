@@ -1,30 +1,49 @@
-<h2 class="mb-3">Catálogos</h2>
+<div class="fade-up">
+  <div class="page-header">
+    <div>
+      <div class="page-title">
+        Catálogo
+        @if (botellas.length > 0) {
+          <span class="count-badge">{{ botellas.length }}</span>
+        }
+      </div>
+      <div class="page-subtitle">Filtra por categoría o explora todo el inventario.</div>
+    </div>
+    <a routerLink="/agregar" class="btn btn-brand">➕ Agregar botella</a>
+  </div>
 
-<div class="mb-4 d-flex gap-2 flex-wrap">
-  <button class="btn"
-          [class.btn-dark]="catalogoActivo === null"
-          [class.btn-outline-dark]="catalogoActivo !== null"
-          (click)="verTodos()">
-    Todos
-  </button>
-
-  @for (cat of catalogos; track cat.id) {
-    <button class="btn"
-            [class.btn-primary]="catalogoActivo === cat.id"
-            [class.btn-outline-primary]="catalogoActivo !== cat.id"
-            (click)="filtrarPor(cat.id)">
-      {{ cat.nombre }}
+  <!-- Filtros -->
+  <div class="filtros-wrapper">
+    <button class="btn-filtro" [class.activo]="catalogoActivo === null" (click)="verTodos()">
+      Todos
     </button>
-  }
-</div>
+    @for (cat of catalogos; track cat.id) {
+      <button class="btn-filtro" [class.activo]="catalogoActivo === cat.id" (click)="filtrarPor(cat.id)">
+        {{ cat.nombre }}
+      </button>
+    }
+  </div>
 
-<div class="row row-cols-1 row-cols-md-3 g-4">
-  @for (botella of botellas; track botella.id) {
-    <div class="col">
-      <app-botella-card
-        [botella]="botella"
-        (verDetalle)="irADetalle($event)">
-      </app-botella-card>
+  @if (cargando) {
+    <div class="loading-wrapper">
+      <div class="spinner"></div>
+      <p style="color: var(--text-muted);">Cargando botellas...</p>
+    </div>
+  } @else if (botellas.length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">📦</div>
+      <p>No hay botellas en esta categoría.</p>
+    </div>
+  } @else {
+    <div class="botellas-grid">
+      @for (botella of botellas; track botella.id) {
+        <app-botella-card
+          [botella]="botella"
+          (verDetalle)="irADetalle($event)"
+          (editar)="irAEditar($event)"
+          (eliminar)="eliminarBotella($event)">
+        </app-botella-card>
+      }
     </div>
   }
 </div>

@@ -2,6 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BotellaService } from '../../services/botella.service';
+import { CatalogoService } from '../../services/catalogo.service';
+import { NotificacionService } from '../../services/notificacion.service';
 import { Catalogo } from '../../interfaces/botella.interface';
 
 @Component({
@@ -13,13 +15,13 @@ import { Catalogo } from '../../interfaces/botella.interface';
 })
 export class AgregarBotellaComponent implements OnInit {
 
-  private botellaService = inject(BotellaService);
-  private router = inject(Router);
+  private botellaService  = inject(BotellaService);
+  private catalogoService = inject(CatalogoService);
+  private notificacion    = inject(NotificacionService);
+  private router          = inject(Router);
 
   catalogos: Catalogo[] = [];
-  mensajeExito = '';
 
-  // Modelo del formulario
   nuevaBotella = {
     nombre: '',
     descripcion: '',
@@ -30,7 +32,7 @@ export class AgregarBotellaComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.botellaService.getCatalogos().subscribe(data => {
+    this.catalogoService.getCatalogos().subscribe(data => {
       this.catalogos = data;
     });
   }
@@ -40,11 +42,11 @@ export class AgregarBotellaComponent implements OnInit {
 
     this.botellaService.crearBotella(this.nuevaBotella).subscribe({
       next: () => {
-        this.mensajeExito = 'Botella agregada correctamente';
+        this.notificacion.mostrar('Botella agregada correctamente');
         formulario.resetForm();
-        setTimeout(() => this.router.navigate(['/botellas']), 1500);
+        setTimeout(() => this.router.navigate(['/lista']), 1000);
       },
-      error: (err) => console.error(err)
+      error: () => this.notificacion.mostrar('Error al guardar la botella', 'error')
     });
   }
 }
