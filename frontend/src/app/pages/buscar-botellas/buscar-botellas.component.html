@@ -1,2 +1,51 @@
-<h2>Buscar botellas</h2>
-<p>Aquí se filtrará por categoría usando query params.</p>
+<div class="fade-up">
+  <div class="page-header">
+    <div>
+      <div class="page-title">
+        Buscar botellas
+        @if (buscando()) {
+          <span class="count-badge">{{ totalResultados() }}</span>
+        }
+      </div>
+      <div class="page-subtitle">Busca por nombre, descripción o categoría.</div>
+    </div>
+  </div>
+
+  @if (cargando()) {
+    <div class="loading-wrapper">
+      <div class="spinner"></div>
+      <p style="color: var(--text-muted);">Cargando catálogo...</p>
+    </div>
+  } @else {
+    <div class="search-wrapper">
+      <span class="search-icon">🔍</span>
+      <input class="search-input"
+             type="text"
+             placeholder="Escribe para buscar..."
+             [value]="termino()"
+             (input)="actualizarTermino($any($event.target).value)">
+    </div>
+
+    @if (!buscando()) {
+      <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <p>Escribe algo para buscar en el catálogo.</p>
+      </div>
+    } @else if (totalResultados() === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">😕</div>
+        <p>No se encontraron botellas con <strong>"{{ termino() }}"</strong>.</p>
+      </div>
+    } @else {
+      <div class="botellas-grid">
+        @for (botella of resultados(); track botella.id) {
+          <app-botella-card
+            [botella]="botella"
+            (verDetalle)="irADetalle($event)"
+            (editar)="irAEditar($event)">
+          </app-botella-card>
+        }
+      </div>
+    }
+  }
+</div>

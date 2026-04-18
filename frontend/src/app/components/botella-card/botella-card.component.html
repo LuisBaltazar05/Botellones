@@ -1,13 +1,33 @@
-<div class="card h-100 shadow-sm">
-  <div class="card-body">
-    <span class="badge bg-secondary mb-2">{{ botella().catalogo }}</span>
-    <h5 class="card-title">{{ botella().nombre }}</h5>
-    <p class="card-text text-muted">{{ botella().descripcion }}</p>
-    <p class="fw-bold">${{ botella().precio }}</p>
-    <p class="text-secondary">{{ botella().capacidad_ml }} ml</p>
-    <button class="btn btn-primary w-100"
-            (click)="irADetalle()">
-      Ver detalle
+<div class="bcard">
+  <!-- Imagen -->
+  @if (botella().imagen_url && !imgError) {
+    <img class="bcard-img" [src]="botella().imagen_url" [alt]="botella().nombre"
+         (error)="imgError = true">
+  } @else {
+    <div class="bcard-img-placeholder">🍶</div>
+  }
+
+  <!-- Cuerpo -->
+  <div class="bcard-body">
+    <span class="bcard-badge">{{ botella().catalogo }}</span>
+    <h6 class="bcard-title">{{ botella().nombre }}</h6>
+    <p class="bcard-desc">{{ botella().descripcion }}</p>
+
+    <div class="bcard-footer">
+      <span class="bcard-price">${{ botella().precio | number:'1.2-2' }}</span>
+      <span class="bcard-cap">{{ botella().capacidad_ml | capacidad }}</span>
+    </div>
+
+    <!-- Agregar al carrito -->
+    <button class="btn btn-brand btn-sm" style="width:100%;justify-content:center;margin-bottom:0.5rem"
+            (click)="agregarAlCarrito()">
+      🛒 Agregar al carrito
     </button>
+
+    <div class="bcard-actions">
+      <button class="btn btn-ghost btn-sm" style="flex:1" (click)="irADetalle()">Ver detalle</button>
+      <button class="btn btn-ghost btn-sm" title="Editar" (click)="irAEditar()">✏️</button>
+      <button class="btn btn-danger btn-sm" title="Eliminar" (click)="solicitarEliminar()">🗑️</button>
+    </div>
   </div>
 </div>

@@ -1,17 +1,51 @@
-@if (cargando) {
-  <p>Cargando detalle...</p>
-} @else if (!botella) {
-  <div class="alert alert-danger">Botella no encontrada.</div>
-} @else {
-  <div class="card shadow p-4 mx-auto" style="max-width: 600px;">
-    <span class="badge bg-secondary mb-2 w-25">{{ botella.catalogo }}</span>
-    <h2>{{ botella.nombre }}</h2>
-    <p class="text-muted">{{ botella.descripcion }}</p>
-    <hr>
-    <p><strong>Precio:</strong> ${{ botella.precio }}</p>
-    <p><strong>Capacidad:</strong> {{ botella.capacidad_ml }} ml</p>
-    <button class="btn btn-outline-secondary mt-3" (click)="regresar()">
-      ← Regresar
-    </button>
-  </div>
-}
+<div class="fade-up">
+  @if (cargando) {
+    <div class="loading-wrapper">
+      <div class="spinner"></div>
+    </div>
+  } @else if (!botella) {
+    <div class="empty-state">
+      <div class="empty-icon">🚫</div>
+      <p>Botella no encontrada.</p>
+      <br>
+      <button class="btn btn-ghost" (click)="regresar()">← Volver al catálogo</button>
+    </div>
+  } @else {
+    <div class="page-header">
+      <button class="btn btn-ghost" (click)="regresar()">← Regresar</button>
+      <div style="display:flex; gap:0.6rem;">
+        <button class="btn btn-brand" (click)="agregarAlCarrito()">🛒 Agregar al carrito</button>
+        <button class="btn btn-ghost" (click)="irAEditar()">✏️ Editar</button>
+        <button class="btn btn-danger" (click)="eliminar()">🗑️ Eliminar</button>
+      </div>
+    </div>
+
+    <div class="detalle-box">
+      @if (botella.imagen_url) {
+        <img class="detalle-img" [src]="botella.imagen_url" [alt]="botella.nombre">
+      }
+      <span class="bcard-badge">{{ botella.catalogo }}</span>
+      <h2 style="font-size:1.6rem; font-weight:800; margin: 0.5rem 0;">{{ botella.nombre }}</h2>
+      <p style="color: var(--text-muted); margin-bottom: 1rem;">{{ botella.descripcion }}</p>
+
+      <div class="detalle-grid">
+        <div class="detalle-item">
+          <label>Precio</label>
+          <strong style="color: var(--brand)">${{ botella.precio | number:'1.2-2' }}</strong>
+        </div>
+        <div class="detalle-item">
+          <label>Capacidad</label>
+          <strong>{{ botella.capacidad_ml | capacidad }}</strong>
+        </div>
+        <div class="detalle-item">
+          <label>Categoría</label>
+          <strong>{{ botella.catalogo }}</strong>
+        </div>
+        <div class="detalle-item">
+          <label>ID</label>
+          <strong>#{{ botella.id }}</strong>
+        </div>
+      </div>
+    </div>
+  }
+</div>

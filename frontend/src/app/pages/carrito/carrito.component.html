@@ -1,0 +1,124 @@
+<div class="fade-up">
+
+  @if (pedidoCompletado()) {
+
+    <div class="pedido-success">
+      <div class="success-checkmark">✅</div>
+      <h2>¡Pedido confirmado!</h2>
+      <p>Número de orden: <strong class="order-num">{{ numeroPedido() }}</strong></p>
+      <p class="success-sub">
+        Recibirás un correo de confirmación en breve.<br>
+        Gracias por comprar en <strong>BotellonesMx</strong>.
+      </p>
+      <button class="btn btn-brand" style="margin-top:1.8rem" (click)="seguirComprando()">
+        Seguir explorando →
+      </button>
+    </div>
+
+  } @else {
+
+    <div class="page-header">
+      <div>
+        <div class="page-title">
+          Mi carrito
+          @if (carrito.totalItems() > 0) {
+            <span class="count-badge">{{ carrito.totalItems() }}</span>
+          }
+        </div>
+        <div class="page-subtitle">
+          @if (carrito.items().length === 0) { Tu carrito está vacío. }
+          @else { Revisa tus productos y confirma el pedido. }
+        </div>
+      </div>
+    </div>
+
+    @if (carrito.items().length === 0) {
+
+      <div class="empty-state">
+        <div class="empty-icon">🛒</div>
+        <p>Agrega botellas desde el catálogo para verlas aquí.</p>
+        <a routerLink="/lista" class="btn btn-brand" style="display:inline-flex;margin-top:1.2rem">
+          Ver catálogo →
+        </a>
+      </div>
+
+    } @else {
+
+      <div class="carrito-layout">
+
+        <!-- Lista de productos -->
+        <div class="carrito-items">
+          @for (item of carrito.items(); track item.botella.id) {
+            <div class="carrito-item">
+              @if (item.botella.imagen_url) {
+                <img class="carrito-item-img" [src]="item.botella.imagen_url" [alt]="item.botella.nombre">
+              } @else {
+                <div class="carrito-item-img carrito-img-ph">🍶</div>
+              }
+              <div class="carrito-item-info">
+                <div class="carrito-item-nombre">{{ item.botella.nombre }}</div>
+                <div class="carrito-item-meta">
+                  {{ item.botella.catalogo }} · {{ item.botella.capacidad_ml | capacidad }}
+                </div>
+                <div class="carrito-item-precio">${{ item.botella.precio | number:'1.2-2' }} c/u</div>
+              </div>
+              <div class="qty-controls">
+                <button class="qty-btn" (click)="carrito.cambiarCantidad(item.botella.id, -1)">−</button>
+                <span class="qty-num">{{ item.cantidad }}</span>
+                <button class="qty-btn" (click)="carrito.cambiarCantidad(item.botella.id, 1)">+</button>
+              </div>
+              <div class="carrito-subtotal">
+                ${{ (item.botella.precio * item.cantidad) | number:'1.2-2' }}
+              </div>
+              <button class="btn-quitar" title="Quitar" (click)="carrito.quitar(item.botella.id)">✕</button>
+            </div>
+          }
+        </div>
+
+        <!-- Resumen del pedido -->
+        <div class="carrito-resumen">
+          <div class="resumen-title">Resumen del pedido</div>
+
+          <div class="resumen-row">
+            <span>Subtotal</span>
+            <span>${{ carrito.totalPrecio() | number:'1.2-2' }}</span>
+          </div>
+          <div class="resumen-row">
+            <span>Envío</span>
+            @if (envio() === 0) {
+              <span class="tag-gratis">Gratis</span>
+            } @else {
+              <span>${{ envio() | number:'1.2-2' }}</span>
+            }
+          </div>
+          @if (envio() > 0) {
+            <p class="envio-hint">Envío gratis en pedidos ≥ $999</p>
+          }
+
+          <div class="resumen-divider"></div>
+
+          <div class="resumen-total">
+            <span>Total</span>
+            <span>${{ total() | number:'1.2-2' }}</span>
+          </div>
+
+          <button class="btn btn-brand"
+                  style="width:100%;justify-content:center;padding:0.85rem;margin-top:1.3rem"
+                  [disabled]="procesando()"
+                  (click)="confirmarPedido()">
+            @if (procesando()) { ⏳ Procesando... }
+            @else { Confirmar pedido }
+          </button>
+
+          <button class="btn btn-ghost"
+                  style="width:100%;justify-content:center;margin-top:0.5rem"
+                  (click)="carrito.vaciar()">
+            Vaciar carrito
+          </button>
+        </div>
+
+      </div>
+    }
+  }
+
+</div>

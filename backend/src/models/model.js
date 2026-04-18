@@ -45,10 +45,26 @@ export const getAllCatalogos = async () => {
 export const insertBotella = async (botella) => {
   const { nombre, descripcion, precio, capacidad_ml, imagen_url, catalogo_id } = botella;
   const [result] = await pool.query(
-    `INSERT INTO botellas 
-     (nombre, descripcion, precio, capacidad_ml, imagen_url, catalogo_id) 
+    `INSERT INTO botellas
+     (nombre, descripcion, precio, capacidad_ml, imagen_url, catalogo_id)
      VALUES (?, ?, ?, ?, ?, ?)`,
     [nombre, descripcion, precio, capacidad_ml, imagen_url, catalogo_id]
   );
+  return result;
+};
+
+// Actualizar una botella existente
+export const updateBotella = async (id, botella) => {
+  const { nombre, descripcion, precio, capacidad_ml, imagen_url, catalogo_id } = botella;
+  const [result] = await pool.query(
+    `UPDATE botellas SET nombre=?, descripcion=?, precio=?, capacidad_ml=?, imagen_url=?, catalogo_id=? WHERE id=?`,
+    [nombre, descripcion, precio, capacidad_ml, imagen_url, catalogo_id, id]
+  );
+  return result;
+};
+
+// Eliminar una botella
+export const deleteBotella = async (id) => {
+  const [result] = await pool.query('DELETE FROM botellas WHERE id=?', [id]);
   return result;
 };

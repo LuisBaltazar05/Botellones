@@ -27,4 +27,12 @@ export class BotellaService {
   crearBotella(botella: Partial<Botella>) {
     return this.http.post(`${this.API}/botellas`, botella);
   }
+
+  actualizarBotella(id: number, botella: Partial<Botella>) {
+    return this.http.put(`${this.API}/botellas/${id}`, botella);
+  }
+
+  eliminarBotella(id: number) {
+    return this.http.delete(`${this.API}/botellas/${id}`);
+  }
 }

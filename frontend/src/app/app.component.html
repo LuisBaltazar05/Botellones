@@ -1,25 +1,57 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
-  <span class="navbar-brand">{{ titulo }}</span>
-  <div class="navbar-nav">
-    <a class="nav-link"
-       routerLink="/"
-       routerLinkActive="active"
-       [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
+<div class="layout">
 
-    <a class="nav-link"
-       routerLink="/botellas"
-       routerLinkActive="active">Botellas</a>
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="logo.jpeg" alt="BotellonesMx" class="sidebar-logo">
+      <div>
+        <div class="sidebar-name">BotellonesMx</div>
+        <div class="sidebar-sub">Catálogo</div>
+      </div>
+    </div>
 
-    <a class="nav-link"
-       routerLink="/catalogo"
-       routerLinkActive="active">Catálogos</a>
+    <nav class="sidebar-nav">
+      <a routerLink="/inicio"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: true }">
+        <span class="nav-icon">🏠</span> Inicio
+      </a>
+      <a routerLink="/lista" routerLinkActive="active">
+        <span class="nav-icon">📦</span> Catálogo
+      </a>
+      <a routerLink="/buscar" routerLinkActive="active">
+        <span class="nav-icon">🔍</span> Buscar
+      </a>
+      <a routerLink="/agregar" routerLinkActive="active">
+        <span class="nav-icon">➕</span> Agregar botella
+      </a>
+      <a routerLink="/carrito" routerLinkActive="active" class="nav-cart">
+        <span class="nav-icon">🛒</span>
+        Carrito
+        @if (carrito.totalItems() > 0) {
+          <span class="cart-badge">{{ carrito.totalItems() }}</span>
+        }
+      </a>
+    </nav>
 
-    <a class="nav-link"
-       routerLink="/agregar"
-       routerLinkActive="active">Agregar</a>
-  </div>
-</nav>
+    <div class="sidebar-footer">
+      BotellonesMx © 2026
+    </div>
+  </aside>
 
-<div class="container mt-4">
-  <router-outlet></router-outlet>
+  <!-- ── Contenido ── -->
+  <main class="main">
+    <router-outlet></router-outlet>
+  </main>
+
+</div>
+
+<!-- ── Toast Notificaciones ── -->
+<div class="toast-container">
+  @for (n of notificaciones.lista(); track n.id) {
+    <div class="toast-item" [class]="'toast-' + n.tipo">
+      <span>{{ n.texto }}</span>
+      <button class="toast-close" (click)="notificaciones.cerrar(n.id)">✕</button>
+    </div>
+  }
 </div>

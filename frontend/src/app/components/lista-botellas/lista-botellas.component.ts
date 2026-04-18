@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BotellaService } from '../../services/botella.service';
+import { NotificacionService } from '../../services/notificacion.service';
 import { Botella } from '../../interfaces/botella.interface';
 import { BotellaCardComponent } from '../botella-card/botella-card.component';
 
@@ -14,7 +15,8 @@ import { BotellaCardComponent } from '../botella-card/botella-card.component';
 export class ListaBotellaComponent implements OnInit {
 
   private botellaService = inject(BotellaService);
-  private router = inject(Router);
+  private notificacion   = inject(NotificacionService);
+  private router         = inject(Router);
 
   botellas: Botella[] = [];
   cargando = true;
@@ -27,16 +29,28 @@ export class ListaBotellaComponent implements OnInit {
         this.totalBotellas = data.length;
         this.cargando = false;
       },
-      error: (err) => {
-        console.error('Error al cargar botellas', err);
-        this.cargando = false;
-      }
+      error: () => this.cargando = false
     });
   }
 
-  // Ruta programática — requisito 11d
   irADetalle(id: number) {
-    this.router.navigate(['/botellas', id]);
+    this.router.navigate(['/detalle', id]);
+  }
+
+  irAEditar(id: number) {
+    this.router.navigate(['/editar', id]);
+  }
+
+  eliminar(id: number) {
+    if (!confirm('¿Deseas eliminar esta botella?')) return;
+    this.botellaService.eliminarBotella(id).subscribe({
+      next: () => {
+        this.botellas = this.botellas.filter(b => b.id !== id);
+        this.totalBotellas = this.botellas.length;
+        this.notificacion.mostrar('Botella eliminada correctamente');
+      },
+      error: () => this.notificacion.mostrar('Error al eliminar', 'error')
+    });
   }
 
   irAAgregar() {

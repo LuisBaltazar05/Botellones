@@ -1,2 +1,113 @@
-<h2>Editar botella</h2>
-<p>Aquí irá el formulario de edición.</p>
+<div class="fade-up">
+  @if (cargando) {
+    <div class="loading-wrapper">
+      <div class="spinner"></div>
+      <p style="color: var(--text-muted);">Cargando datos...</p>
+    </div>
+  } @else {
+    <div class="page-header">
+      <div>
+        <div class="page-title">Editar botella</div>
+        <div class="page-subtitle">Modifica los campos y guarda los cambios.</div>
+      </div>
+      <button class="btn btn-ghost" (click)="cancelar()">← Cancelar</button>
+    </div>
+
+    <div class="form-box">
+      <form [formGroup]="form" (ngSubmit)="guardar()">
+
+        <div class="form-group">
+          <label class="form-label">Nombre</label>
+          <input class="form-input" type="text" formControlName="nombre"
+                 [class.is-error]="nombre?.invalid && nombre?.touched"
+                 placeholder="Nombre de la botella">
+          @if (nombre?.invalid && nombre?.touched) {
+            <div class="error-msg">
+              @if (nombre?.errors?.['required'])  { El nombre es obligatorio. }
+              @if (nombre?.errors?.['minlength']) { Mínimo 3 caracteres. }
+              @if (nombre?.errors?.['maxlength']) { Máximo 100 caracteres. }
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Descripción</label>
+          <textarea class="form-input" rows="3" formControlName="descripcion"
+                    [class.is-error]="descripcion?.invalid && descripcion?.touched"
+                    placeholder="Describe la botella..."></textarea>
+          @if (descripcion?.invalid && descripcion?.touched) {
+            <div class="error-msg">
+              @if (descripcion?.errors?.['required'])  { La descripción es obligatoria. }
+              @if (descripcion?.errors?.['minlength']) { Mínimo 10 caracteres. }
+              @if (descripcion?.errors?.['maxlength']) { Máximo 500 caracteres. }
+            </div>
+          }
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Precio ($)</label>
+            <input class="form-input" type="number" formControlName="precio"
+                   [class.is-error]="precio?.invalid && precio?.touched" placeholder="0.00">
+            @if (precio?.invalid && precio?.touched) {
+              <div class="error-msg">
+                @if (precio?.errors?.['required']) { El precio es obligatorio. }
+                @if (precio?.errors?.['min'])      { Debe ser mayor a $0. }
+                @if (precio?.errors?.['max'])      { No puede superar $99,999. }
+              </div>
+            }
+          </div>
+          <div class="form-group">
+            <label class="form-label">Capacidad (ml)</label>
+            <input class="form-input" type="number" formControlName="capacidad_ml"
+                   [class.is-error]="capacidad?.invalid && capacidad?.touched" placeholder="500">
+            @if (capacidad?.invalid && capacidad?.touched) {
+              <div class="error-msg">
+                @if (capacidad?.errors?.['required']) { Obligatorio. }
+                @if (capacidad?.errors?.['min'])      { Mínimo 1 ml. }
+                @if (capacidad?.errors?.['max'])      { Máximo 50,000 ml. }
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">URL de imagen</label>
+          <input class="form-input" type="text" formControlName="imagen_url"
+                 [class.is-error]="imagenUrl?.invalid && imagenUrl?.touched"
+                 placeholder="https://ejemplo.com/imagen.jpg">
+          @if (imagenUrl?.invalid && imagenUrl?.touched) {
+            <div class="error-msg">
+              @if (imagenUrl?.errors?.['required'])  { La URL es obligatoria. }
+              @if (imagenUrl?.errors?.['minlength']) { URL muy corta. }
+              @if (imagenUrl?.errors?.['pattern'])   { Debe ser una URL válida (http/https). }
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Categoría</label>
+          <select class="form-input" formControlName="catalogo_id"
+                  [class.is-error]="catalogoId?.invalid && catalogoId?.touched">
+            <option [value]="0" disabled>Selecciona una categoría</option>
+            @for (c of catalogos; track c.id) {
+              <option [value]="c.id">{{ c.nombre }}</option>
+            }
+          </select>
+          @if (catalogoId?.invalid && catalogoId?.touched) {
+            <div class="error-msg">Selecciona una categoría válida.</div>
+          }
+        </div>
+
+        <div style="display:flex; gap:0.75rem; margin-top:1.2rem;">
+          <button type="submit" class="btn btn-brand" style="flex:1; justify-content:center; padding:0.8rem;"
+                  [disabled]="form.invalid || guardando">
+            {{ guardando ? 'Guardando...' : '💾 Guardar cambios' }}
+          </button>
+          <button type="button" class="btn btn-ghost" (click)="cancelar()">Cancelar</button>
+        </div>
+
+      </form>
+    </div>
+  }
+</div>
