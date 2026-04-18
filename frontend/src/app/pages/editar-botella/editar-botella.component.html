@@ -78,9 +78,7 @@
                  placeholder="https://ejemplo.com/imagen.jpg">
           @if (imagenUrl?.invalid && imagenUrl?.touched) {
             <div class="error-msg">
-              @if (imagenUrl?.errors?.['required'])  { La URL es obligatoria. }
-              @if (imagenUrl?.errors?.['minlength']) { URL muy corta. }
-              @if (imagenUrl?.errors?.['pattern'])   { Debe ser una URL válida (http/https). }
+              @if (imagenUrl?.errors?.['pattern']) { Debe ser una URL válida (http/https). }
             </div>
           }
         </div>
