@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BotellaService } from '../../services/botella.service';
 import { NotificacionService } from '../../services/notificacion.service';
+import { ConfirmService } from '../../services/confirm.service';
 import { Botella } from '../../interfaces/botella.interface';
 import { BotellaCardComponent } from '../botella-card/botella-card.component';
 
@@ -16,6 +17,7 @@ export class ListaBotellaComponent implements OnInit {
 
   private botellaService = inject(BotellaService);
   private notificacion   = inject(NotificacionService);
+  private confirmSvc     = inject(ConfirmService);
   private router         = inject(Router);
 
   botellas: Botella[] = [];
@@ -41,8 +43,9 @@ export class ListaBotellaComponent implements OnInit {
     this.router.navigate(['/editar', id]);
   }
 
-  eliminar(id: number) {
-    if (!confirm('¿Deseas eliminar esta botella?')) return;
+  async eliminar(id: number) {
+    const ok = await this.confirmSvc.abrir('¿Deseas eliminar esta botella?');
+    if (!ok) return;
     this.botellaService.eliminarBotella(id).subscribe({
       next: () => {
         this.botellas = this.botellas.filter(b => b.id !== id);
