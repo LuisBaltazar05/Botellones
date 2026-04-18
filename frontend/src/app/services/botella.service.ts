@@ -1,12 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Botella, Catalogo } from '../interfaces/botella.interface';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class BotellaService {
 
   private http = inject(HttpClient);
-  private API = 'http://localhost:3000/api';
+  private API = environment.apiUrl;
 
   getBotellas() {
     return this.http.get<Botella[]>(`${this.API}/botellas`);
