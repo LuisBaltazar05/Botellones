@@ -3,8 +3,8 @@ import pool from '../config/db.js';
 // Obtener todas las botellas con su catalogo
 export const getAllBotellas = async () => {
   const [rows] = await pool.query(`
-    SELECT b.id, b.nombre, b.descripcion, b.precio, 
-           b.capacidad_ml, b.imagen_url, c.nombre AS catalogo
+    SELECT b.id, b.nombre, b.descripcion, b.precio,
+           b.capacidad_ml, b.imagen_url, b.catalogo_id, c.nombre AS catalogo
     FROM botellas b
     JOIN catalogos c ON b.catalogo_id = c.id
   `);
@@ -14,8 +14,8 @@ export const getAllBotellas = async () => {
 // Obtener una botella por id
 export const getBotellaById = async (id) => {
   const [rows] = await pool.query(`
-    SELECT b.id, b.nombre, b.descripcion, b.precio, 
-           b.capacidad_ml, b.imagen_url, c.nombre AS catalogo
+    SELECT b.id, b.nombre, b.descripcion, b.precio,
+           b.capacidad_ml, b.imagen_url, b.catalogo_id, c.nombre AS catalogo
     FROM botellas b
     JOIN catalogos c ON b.catalogo_id = c.id
     WHERE b.id = ?
@@ -26,8 +26,8 @@ export const getBotellaById = async (id) => {
 // Obtener botellas por catalogo
 export const getBotellasByCatalogo = async (catalogo_id) => {
   const [rows] = await pool.query(`
-    SELECT b.id, b.nombre, b.descripcion, b.precio, 
-           b.capacidad_ml, b.imagen_url, c.nombre AS catalogo
+    SELECT b.id, b.nombre, b.descripcion, b.precio,
+           b.capacidad_ml, b.imagen_url, b.catalogo_id, c.nombre AS catalogo
     FROM botellas b
     JOIN catalogos c ON b.catalogo_id = c.id
     WHERE b.catalogo_id = ?
