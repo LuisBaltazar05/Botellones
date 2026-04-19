@@ -5,6 +5,7 @@ import { CatalogoService } from '../../services/catalogo.service';
 import { Botella, Catalogo } from '../../interfaces/botella.interface';
 import { BotellaCardComponent } from '../botella-card/botella-card.component';
 import { NotificacionService } from '../../services/notificacion.service';
+import { ConfirmService } from '../../services/confirm.service';
 
 @Component({
   selector: 'app-catalogo-filtro',
@@ -20,6 +21,7 @@ export class CatalogoFiltroComponent implements OnInit {
   private botellaService = inject(BotellaService);
   private catalogoService= inject(CatalogoService);
   private notificacion   = inject(NotificacionService);
+  private confirmSvc     = inject(ConfirmService);
 
   botellas: Botella[] = [];
   catalogos: Catalogo[] = [];
@@ -63,8 +65,9 @@ export class CatalogoFiltroComponent implements OnInit {
     this.router.navigate(['/detalle', id]);
   }
 
-  eliminarBotella(id: number) {
-    if (!confirm('¿Seguro que deseas eliminar esta botella?')) return;
+  async eliminarBotella(id: number) {
+    const ok = await this.confirmSvc.abrir('¿Seguro que deseas eliminar esta botella?');
+    if (!ok) return;
     this.botellaService.eliminarBotella(id).subscribe({
       next: () => {
         this.botellas = this.botellas.filter(b => b.id !== id);

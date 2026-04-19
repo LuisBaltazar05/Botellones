@@ -46,6 +46,19 @@
 
 </div>
 
+<!-- ── Diálogo de confirmación ── -->
+@if (confirm.visible()) {
+  <div class="confirm-overlay">
+    <div class="confirm-box">
+      <p class="confirm-msg">{{ confirm.mensaje() }}</p>
+      <div class="confirm-actions">
+        <button class="btn btn-danger" (click)="confirm.confirmar()">Eliminar</button>
+        <button class="btn btn-ghost" (click)="confirm.cancelar()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+}
+
 <!-- ── Toast Notificaciones ── -->
 <div class="toast-container">
   @for (n of notificaciones.lista(); track n.id) {

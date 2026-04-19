@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { NotificacionService } from './services/notificacion.service';
 import { CarritoService } from './services/carrito.service';
+import { ConfirmService } from './services/confirm.service';
 
 @Component({
   selector: 'app-root',
@@ -13,4 +14,5 @@ import { CarritoService } from './services/carrito.service';
 export class AppComponent {
   notificaciones = inject(NotificacionService);
   carrito        = inject(CarritoService);
+  confirm        = inject(ConfirmService);
 }

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BotellaService } from '../../services/botella.service';
 import { NotificacionService } from '../../services/notificacion.service';
 import { CarritoService } from '../../services/carrito.service';
+import { ConfirmService } from '../../services/confirm.service';
 import { Botella } from '../../interfaces/botella.interface';
 import { DecimalPipe } from '@angular/common';
 import { CapacidadPipe } from '../../pipes/capacidad.pipe';
@@ -21,6 +22,7 @@ export class DetalleBotellaComponent implements OnInit {
   private botellaService = inject(BotellaService);
   private notificacion   = inject(NotificacionService);
   private carritoSvc     = inject(CarritoService);
+  private confirmSvc     = inject(ConfirmService);
 
   botella: Botella | null = null;
   cargando = true;
@@ -55,9 +57,10 @@ export class DetalleBotellaComponent implements OnInit {
     if (this.botella) this.router.navigate(['/editar', this.botella.id]);
   }
 
-  eliminar() {
+  async eliminar() {
     if (!this.botella) return;
-    if (!confirm('¿Deseas eliminar esta botella?')) return;
+    const ok = await this.confirmSvc.abrir('¿Deseas eliminar esta botella?');
+    if (!ok) return;
     this.botellaService.eliminarBotella(this.botella.id).subscribe({
       next: () => {
         this.notificacion.mostrar('Botella eliminada');
